@@ -230,8 +230,8 @@ export default () => {
         when={!loading()}
         fallback={() => (
           <div class="gen-cb-wrapper">
-            <span>AI is thinking...</span>
-            <div class="gen-cb-stop" onClick={stopStreamFetch}>Stop</div>
+            <span>回复生成中...</span>
+            <div class="gen-cb-stop" onClick={stopStreamFetch}>取消</div>
           </div>
         )}
       >
@@ -240,7 +240,7 @@ export default () => {
             ref={inputRef!}
             disabled={systemRoleEditing()}
             onKeyDown={handleKeydown}
-            placeholder="Enter something..."
+            placeholder="说点什么..."
             autocomplete="off"
             autofocus
             onInput={() => {
