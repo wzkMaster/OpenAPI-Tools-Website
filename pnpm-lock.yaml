@@ -16,6 +16,9 @@ dependencies:
   '@unocss/reset':
     specifier: ^0.50.1
     version: 0.50.4
+  '@vercel/analytics':
+    specifier: ^0.1.11
+    version: 0.1.11(react@18.2.0)
   astro:
     specifier: ^2.0.15
     version: 2.1.3

@@ -10,7 +10,9 @@ import disableBlocks from './plugins/disableBlocks'
 
 const envAdapter = () => {
   if (process.env.OUTPUT === 'vercel') {
-    return vercel()
+    return vercel({
+      analytics: true,
+    });
   } else if (process.env.OUTPUT === 'netlify') {
     return netlify()
   } else {
