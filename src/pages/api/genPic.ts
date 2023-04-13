@@ -9,7 +9,6 @@ const openai = new OpenAIApi(configuration);
 export const post: APIRoute = async (context) => {
   const body = await context.request.json();
   const { prompt, size } = body;
-  console.log(body);
   try {
     const response = await openai.createImage({
       prompt,
@@ -26,6 +25,7 @@ export const post: APIRoute = async (context) => {
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     return new Response(
       JSON.stringify({
         error: {
