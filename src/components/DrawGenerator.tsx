@@ -8,11 +8,14 @@ export default () => {
   const [controller, setController] = createSignal<AbortController>(null);
   const [image, setImage] = createSignal<string>(null);
   const [size, setSize] = createSignal("512x512");
+  const [lastPrompt, setLastPrompt] = createSignal<string>(null);
   const handleButtonClick = async () => {
     const inputValue = inputRef.value;
     if (!inputValue) return;
 
     setLoading(true);
+    setImage(null);
+    setLastPrompt(inputValue);
     try {
 
       const controller = new AbortController();
@@ -63,6 +66,7 @@ export default () => {
         <div class="gen-text-wrapper flex-col md:flex-row">
           <textarea
             ref={inputRef!}
+            value={lastPrompt()}
             placeholder="请输入提示词..."
             autocomplete="off"
             autofocus
@@ -116,6 +120,7 @@ export default () => {
         )}
       >
         <img src={image()} style={{ width: "100%" }} />
+        <p text-coolGray mt-5 w-auto text-center>{lastPrompt()}</p>
       </Show>
     </div>
   );
