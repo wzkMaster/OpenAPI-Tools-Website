@@ -1,10 +1,10 @@
 import { Show, createSignal } from "solid-js";
-import '../loading.css'
+import "../loading.css";
 
 export default () => {
   let inputRef: HTMLTextAreaElement;
   const [loading, setLoading] = createSignal(false);
-  const [error, setError] = createSignal(null);
+  const [error, setError] = createSignal(false);
   const [controller, setController] = createSignal<AbortController>(null);
   const [image, setImage] = createSignal<string>(null);
   const [size, setSize] = createSignal("512x512");
@@ -12,36 +12,33 @@ export default () => {
   const handleButtonClick = async () => {
     const inputValue = inputRef.value;
     if (!inputValue) return;
-
+    setError(false);
     setLoading(true);
     setImage(null);
     setLastPrompt(inputValue);
-    try {
+    const controller = new AbortController();
+    setController(controller);
 
-      const controller = new AbortController();
-      setController(controller);
-  
-      const storagePassword = localStorage.getItem("pass");
-  
-      const timestamp = Date.now();
-      const response = await fetch("/api/genPic", {
-        method: "POST",
-        body: JSON.stringify({
-          prompt: inputValue,
-          time: timestamp,
-          pass: storagePassword,
-          size: size()
-        }),
-        signal: controller.signal,
-      });
-      
+    const storagePassword = localStorage.getItem("pass");
+
+    const timestamp = Date.now();
+    const response = await fetch("/api/genPic", {
+      method: "POST",
+      body: JSON.stringify({
+        prompt: inputValue,
+        time: timestamp,
+        pass: storagePassword,
+        size: size(),
+      }),
+      signal: controller.signal,
+    })
+    if (response.ok){
       setImage((await response.json()).imageUrl);
-      setLoading(false);
-    } catch (error) {
-      setError(error.message);
-      setLoading(false);
+    } else {
+      setError(true);
     }
-  }
+    setLoading(false);
+  };
 
   const stopFetch = () => {
     if (controller()) {
@@ -114,13 +111,15 @@ export default () => {
         fallback={() => (
           <Show when={error()}>
             <div class="my-4 px-4 py-3 border border-red/50 bg-red/10">
-              <div class="text-red op-70 text-sm">出错了，请重试</div>
+              <div class="text-red text-sm">生成失败</div>
             </div>
           </Show>
         )}
       >
         <img src={image()} style={{ width: "100%" }} />
-        <p text-coolGray mt-5 w-auto text-center>{lastPrompt()}</p>
+        <p text-coolGray mt-5 w-auto text-center>
+          {lastPrompt()}
+        </p>
       </Show>
     </div>
   );
