@@ -1,4 +1,5 @@
 import { Show, createSignal } from "solid-js";
+import '../loading.css'
 
 export default () => {
   let inputRef: HTMLTextAreaElement;
@@ -59,28 +60,28 @@ export default () => {
           </div>
         )}
       >
-        <div class="gen-text-wrapper">
+        <div class="gen-text-wrapper flex-col md:flex-row">
           <textarea
             ref={inputRef!}
-            placeholder="输入提示词（只能英文，否则无法生成！）"
+            placeholder="请输入提示词..."
             autocomplete="off"
             autofocus
             onInput={() => {
               inputRef.style.height = "auto";
               inputRef.style.height = `${inputRef.scrollHeight}px`;
             }}
-            rows="1"
+            rows={1}
             class="gen-textarea"
           />
-          <button onClick={handleButtonClick} gen-slate-btn>
-            Send
-          </button>
           <select
             name="尺寸"
             id="size"
             onChange={(e) => setSize(e.target.value)}
-            gen-slate-btn
+            class="gen-slate-btn
             hover:cursor-pointer
+            text-center
+            lg:text-left
+            "
             style={{
               appearance: "none",
               "background-image":
@@ -96,7 +97,13 @@ export default () => {
             </option>
             <option value="1024x1024">1024x1024</option>
           </select>
+          <button onClick={handleButtonClick} gen-slate-btn>
+            Draw
+          </button>
         </div>
+      </Show>
+      <Show when={loading()}>
+        <div class="loader">Drawing</div>
       </Show>
       <Show
         when={image()}
@@ -108,7 +115,7 @@ export default () => {
           </Show>
         )}
       >
-        <img src={image()} />
+        <img src={image()} style={{ width: "100%" }} />
       </Show>
     </div>
   );

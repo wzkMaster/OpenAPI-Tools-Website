@@ -5,12 +5,14 @@ import "katex/dist/katex.min.css";
 import "highlight.js/styles/atom-one-dark.css";
 import DrawHeader from "@/components/DrawHeader.astro";
 import DrawGenerator from "@/components/DrawGenerator";
+import Footer from "@/components/Footer.astro";
 ---
 
 <Layout title="OpenAI 实用工具">
   <main>
     <DrawHeader />
     <DrawGenerator client:load />
+    <Footer />
     <div
       class="fixed bottom-5 left-5 rounded-md hover:bg-slate/10 w-fit h-fit transition-colors active:scale-90"
     >
